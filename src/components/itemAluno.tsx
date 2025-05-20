@@ -1,49 +1,21 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { StackParamList } from '../types/navigation'; // caminho para seu StackParamList
+import { View, Text, Image, StyleSheet } from 'react-native';
 
-type NavigationProp = StackNavigationProp<StackParamList, 'detalhesAlunos'>;
-
-interface ItemAlunoProps {
-  aluno: any; // ou use o tipo "Aluno" se já estiver definido corretamente
-}
-
-const ItemAluno: React.FC<ItemAlunoProps> = ({ aluno }) => {
-  const navigation = useNavigation<NavigationProp>();
-
-  const handlePress = () => {
-    navigation.navigate('detalhesAlunos', { aluno });
-  };
-
-  return (
-    <TouchableOpacity style={estilos.container} onPress={handlePress}>
-      <Image source={{ uri: aluno.image }} style={estilos.imagem} />
-      <Text style={estilos.nome}>
-        {aluno.firstName} {aluno.lastName}
-      </Text>
-    </TouchableOpacity>
-  );
+export type ItemAlunoProps = {
+  nome: string;
+  avatar: string;
 };
 
-const estilos = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
-    borderBottomWidth: 1,
-    borderColor: '#ccc',
-  },
-  imagem: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: 10,
-  },
-  nome: {
-    fontSize: 16,
-  },
-});
+export default function ItemAluno({ nome, avatar }: ItemAlunoProps) {
+  return (
+    <View style={styles.container}>
+      <Image source={{ uri: avatar }} style={styles.avatar} />
+      <Text>{nome}</Text>
+    </View>
+  );
+}
 
-export default ItemAluno;
+const styles = StyleSheet.create({
+  container: { flexDirection: 'row', alignItems: 'center', padding: 10 },
+  avatar: { width: 40, height: 40, borderRadius: 20, marginRight: 10 },
+});

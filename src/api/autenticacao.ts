@@ -19,4 +19,4 @@ export async function buscarAlunos(token: string) {
 
   const dados = await resposta.json();
   return dados.users;
-}
+} 

@@ -1,19 +1,28 @@
-// src/screens/ListaAlunos.tsx
-
-import React from 'react';
-import { View, FlatList } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { FlatList, TouchableOpacity } from 'react-native';
 import ItemAluno from '../components/itemAluno';
+import { buscarAlunos } from '../api/autenticacao';
+import { useAutenticacao } from '../context/contextoAutenticacao';
 
-const ListaAlunos = ({ alunos }: any) => {
+export default function ListaAlunos({ navigation }: any) {
+  const [lista, setLista] = useState<any[]>([]);
+  const { usuario } = useAutenticacao();
+
+  useEffect(() => {
+    buscarAlunos(usuario!.token)
+      .then((resposta) => setLista(resposta))
+      .catch(() => {});
+  }, []);
+
   return (
-    <View>
-      <FlatList
-        data={alunos}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => <ItemAluno aluno={item} />}
-      />
-    </View>
+    <FlatList
+      data={lista}
+      keyExtractor={(aluno) => aluno.id.toString()}
+      renderItem={({ item }) => (
+        <TouchableOpacity onPress={() => navigation.navigate('Detalhes', { aluno: item })}>
+          <ItemAluno nome={item.firstName + ' ' + item.lastName} avatar={item.image} />
+        </TouchableOpacity>
+      )}
+    />
   );
-};
-
-export default ListaAlunos;
+}
